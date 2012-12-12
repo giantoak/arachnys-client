@@ -38,7 +38,7 @@ def search_country_news(parsed):
         i = 1
         for worker in succeeded:
             print '[%s] Results for %s (%s results available)' % (i, worker['searchworker']['name'],
-                                                                                                                        worker['searchworker']['results_available'])
+                                                                  worker['searchworker']['results_available'])
             i += 1
             print_results(worker)
     if failed:
