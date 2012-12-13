@@ -39,8 +39,10 @@ class ArachnysClient(object):
         JSON object.
         """
         url = urljoin(self.API_BASE, endpoint)
-        if not resource_id is None:
-            url = url + str(resource_id) + '/'
+        if not url.endswith('/'):
+            url += '/'
+        if resource_id is not None:
+            url += str(resource_id) + '/'
         try:
             if method == 'get':
                 data = {}
