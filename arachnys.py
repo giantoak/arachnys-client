@@ -1,3 +1,4 @@
+from urlparse import urljoin
 import json
 import os
 import time
@@ -37,7 +38,7 @@ class ArachnysClient(object):
         will be urlencoded if making a GET request, and otherwise will be sent as a
         JSON object.
         """
-        url = '%s%s/' % (self.API_BASE, endpoint)
+        url = urljoin(self.API_BASE, endpoint)
         if not resource_id is None:
             url = url + str(resource_id) + '/'
         try:
