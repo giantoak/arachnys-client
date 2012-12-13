@@ -5,8 +5,8 @@ from arachnys import ArachnysClient
 
 
 def search_country_news(parsed):
-    print 'Using app_id %s and api_key %s' % (parsed.app_id, parsed.api_key)
     client = ArachnysClient(parsed.app_id, parsed.api_key, parsed.host, debug=parsed.debug)
+    print 'Using app_id %s and api_key %s' % (client.app_id, client.api_key)
     query = raw_input('Enter query: ')
     translate_to = raw_input('Enter iso code of target language (blank for no translation): ').strip()
     if translate_to:
