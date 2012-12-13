@@ -29,7 +29,6 @@ def search_country_news(parsed):
         exit(0)
 
     search = client.do_search(query, country_iso_code=iso_code)['search']
-    print search
     worker_ids = [w['id'] for w in search['searchworkers']]
     (succeeded, failed) = client.poll_searchworkers(worker_ids)
     print '%d searchworkers succeeded, %d failed' % (len(succeeded), len(failed))
