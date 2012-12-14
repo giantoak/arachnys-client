@@ -34,11 +34,9 @@ def search_country_news(parsed):
     print '%d searchworkers succeeded, %d failed' % (len(succeeded), len(failed))
     if succeeded:
         print 'Success:'
-        i = 1
-        for worker in succeeded:
+        for i, worker in enumerate(succeeded, start=1):
             print '[%s] Results for %s (%s results available)' % (i, worker['searchworker']['name'],
                                                                   worker['searchworker']['results_available'])
-            i += 1
             print_results(worker)
     if failed:
         print '%s searchworkers failed: %s' % (len(failed), ', '.join([f['searchworker']['name'] for f in failed]))
@@ -58,10 +56,8 @@ def search_country_news(parsed):
 
 
 def print_results(worker):
-    i = 1
-    for result in worker['searchresults']:
+    for i, result in enumerate(worker['searchresults'], start=1):
         print '%d. %s' % (i, result['title'])
-        i += 1
     print ''
 
 
