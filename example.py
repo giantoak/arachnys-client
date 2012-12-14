@@ -49,14 +49,15 @@ def search_country_news(parsed):
             to_paginate = int(to_paginate)
         except TypeError:
             print 'Not a valid choice, exiting'
-        if to_paginate > i:
+        if not 0 < to_paginate <= i:
             print 'Not a valid choice, exiting'
-        worker = client.get_searchworker(worker['searchworker']['id'], start=10)
-        print_results(worker)
+        worker_id = succeeded[to_paginate - 1]['searchworker']['id']
+        worker = client.get_searchworker(worker_id, start=10)
+        print_results(worker, start=11)
 
 
-def print_results(worker):
-    for i, result in enumerate(worker['searchresults'], start=1):
+def print_results(worker, start=1):
+    for i, result in enumerate(worker['searchresults'], start=start):
         print '%d. %s' % (i, result['title'])
     print ''
 
