@@ -96,7 +96,7 @@ class ArachnysClient(object):
 
     def get_collections(self, filter=None):
         params = {}
-        if not filter is None:
+        if filter is not None:
             params['filter'] = filter
         return self.make_request('collections', 'get', params=params)
 
@@ -112,9 +112,9 @@ class ArachnysClient(object):
 
     def modify_collection(self, id, name=None, description=None, sources=()):
         params = {}
-        if not name is None:
+        if name is not None:
             params['name'] = name
-        if not description is None:
+        if description is not None:
             params['description'] = description
         if sources:
             params['sources'] = sources
@@ -129,7 +129,7 @@ class ArachnysClient(object):
 
     def get_countries(self, filter=None):
         params = {}
-        if not filter is None:
+        if filter is not None:
             params['name_filter'] = filter
         return self.make_request('countries', 'get', params=params)
 
