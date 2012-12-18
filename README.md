@@ -445,17 +445,6 @@ OR
 
 *   `collection_id` - id of a source collection
 
-Optional
-
-*   `group_types <bool>` - whether or not to group searches that **can** be grouped
-    together. Default: `true`
-    *   `user_simulation` queries **cannot** be grouped *either* with other
-        `user_simulation` sources *or* with other `index_type`s
-    *   `timeline_index` searches **can only** be grouped with other
-        `timeline_index` searches
-    *   `advanced_index` can **only** be grouped with other `advanced_index` searches
-    *   `basic_index` searches can **only** be grouped with other `basic_index` searches
-
 #### Response
 
 *   `uid <string>` - `search`es do not have `id`s but `uid`s. You should use the

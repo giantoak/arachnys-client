@@ -138,11 +138,10 @@ class ArachnysClient(object):
 
     # Search
 
-    def do_search(self, query, group_types=False, country_iso_code=None, category=None,
-                                index_type=None, source_ids=(), collection_id=None):
+    def do_search(self, query, country_iso_code=None, category=None,
+                  index_type=None, source_ids=(), collection_id=None):
         payload = {
             'query': query,
-            'group_types': group_types,
             'country_iso_code': country_iso_code,
             'category': category,
             'index_type': index_type,
