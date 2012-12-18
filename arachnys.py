@@ -70,8 +70,12 @@ class ArachnysClient(object):
             raise e
         if self.debug:
             print "Got response from API: %s" % resp.json
-        if resp.json['status'] == 'error':
-            raise ResponseException('Got error from Arachnys API: %s' % resp.json['error_message'])
+        if not resp.ok:
+            if resp.json:
+                error_message = resp.json['error_message']
+            else:
+                error_message = str(resp.status_code)
+            raise ResponseException('Got error from Arachnys API: %s' % error_message)
         return resp.json
 
     # Translation
