@@ -8,5 +8,5 @@ setup(
     author='David Buxton',
     author_email='david@arachnys.com',
     py_modules=['arachnys'],
-    install_requires=['requests'],
+    install_requires=['requests>=1.0.3'],
 )
