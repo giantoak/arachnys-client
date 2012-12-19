@@ -24,15 +24,16 @@ class ArachnysClient(object):
             app_id = os.environ.get('ARACHNYS_APP_ID')
             if not app_id:
                 raise ConfigException('You need an app id')
-        self.app_id = app_id
         if api_key is None:
             api_key = os.environ.get('ARACHNYS_API_KEY')
             if not api_key:
                 raise ConfigException('You need an api key')
-        self.api_key = api_key
         self.debug = debug
+        self.session = requests.session()
+        self.session.auth = (app_id, api_key)
+        self.session.headers['Accept'] = 'application/json'
 
-    def make_request(self, endpoint, method='get', resource_id=None, params={}):
+    def make_request(self, endpoint, method='get', resource_id=None, params=None):
         """
         Takes an endpoint and makes the request, returning a Response object Params
         will be urlencoded if making a GET request, and otherwise will be sent as a
@@ -43,33 +44,29 @@ class ArachnysClient(object):
             url += '/'
         if resource_id is not None:
             url += str(resource_id) + '/'
-        try:
-            if method == 'get':
-                data = {}
-                params = params
-            elif method in ('post', 'put', 'delete'):
+        method = method.upper()
+        data = None
+        headers = None
+        if method in ('POST', 'PUT', 'DELETE'):
+            if params:
                 data = json.dumps(params)
-                params = {}
-            if self.debug:
-                debug_url = url
-                if params:
-                    debug_url = '%s?%s' % (url, urllib.urlencode(params))
-                print 'Sending request to %s' % debug_url
-                print 'Body: %s' % data
-            resp = getattr(requests, method)(
-                url,
-                auth=(self.app_id, self.api_key),
-                params=params,
-                data=data,
-                headers={
-                    'accept': 'application/json',
-                    'content-type': 'application/json'
-                }
-            )
-        except requests.exceptions.RequestException, e:
-            raise e
+            params = None
+            headers = {'Content-Type': 'application/json'}
         if self.debug:
-            print "Got response from API: %s" % resp.json
+            debug_url = url
+            if params:
+                debug_url = '%s?%s' % (url, urllib.urlencode(params))
+            print 'Sending %s request to %s' % (method, debug_url)
+            print 'Body: %s' % data
+        resp = self.session.request(
+            method,
+            url,
+            params=params,
+            data=data,
+            headers=headers,
+        )
+        if self.debug:
+            print "Got response from API: %s" % resp.json or resp.text
         if not resp.ok:
             if resp.json:
                 error_message = resp.json['error_message']
