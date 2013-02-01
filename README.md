@@ -523,6 +523,7 @@ None
     *   `snippet` - snippet of result
     *   `public_extra` - flat key -> value mapping of extra result data
     *   `url` - url of result
+    *   `norman_url` - url to a normalized copy of the result page
     *   `language` - detected language of result (two letter code)
     *   `published_date` - date of publication of result, if available
 *   `searchworker`
