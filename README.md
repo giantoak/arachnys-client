@@ -521,6 +521,7 @@ None
     *   `id` - id of result
     *   `title` - title of result document
     *   `snippet` - snippet of result
+    *   `public_extra` - flat key -> value mapping of extra result data
     *   `url` - url of result
     *   `language` - detected language of result (two letter code)
     *   `published_date` - date of publication of result, if available
