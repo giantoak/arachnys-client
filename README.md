@@ -613,6 +613,32 @@ Optional:
       "translated_text": "\u0410\u0431\u0440\u0430\u043c\u043e\u0432\u0438\u0447 NEAR5 \u041f\u0443\u0442\u0438\u043d"
     } # абрамович NEAR5 путин - i.e. "abramovich in Cyrillic within 5 words of putin in Cyrillic"
 
+### List alerts
+
+`GET /alerts/`
+
+#### Params
+
+None
+
+### Get alert updates
+
+`GET /alert/<alert_id>/`
+
+#### Params
+
+*   `updates_since`: iso-formatted date. Limit the updates returned to those
+    following the given date. Defaults to 1 day ago
+
+### Register new alert
+
+`POST /alert/`
+
+#### Params
+
+*   `query`: search terms
+*   `country`: country iso code
+
 API client
 ==========
 

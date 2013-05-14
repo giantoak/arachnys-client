@@ -1,4 +1,5 @@
 from urlparse import urljoin
+import datetime
 import json
 import os
 import time
@@ -216,6 +217,26 @@ class ArachnysClient(object):
             'query': query,
         }
         return self.make_request('sources', 'get', params=params)
+
+    # Alerts
+
+    def get_alerts(self):
+        return self.make_request('alerts', 'get')
+
+    def get_alert_updates(self, alert_id, updates_since=None):
+        if updates_since:
+            if not isinstance(updates_since, datetime.date):
+                raise ValueError("'updates_since' must be a datetime.date instance")
+            params = {'updates_since': updates_since.isoformat()[:19]}
+        else:
+            params = None
+        return self.make_request('alert', 'get', alert_id, params)
+
+    def register_alert(self, query, country):
+        return self.make_request('alert', 'post', params={
+            'query': query,
+            'country': country,
+        })
 
 
 class ConfigException(Exception):
