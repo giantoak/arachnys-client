@@ -248,6 +248,9 @@ class ArachnysClient(object):
             params['country'] = country
         return self.make_request('alert', 'put', alert_id, params)
 
+    def delete_alert(self, alert_id):
+        return self.make_request('alert', 'delete', alert_id)
+
 
 class ConfigException(Exception):
     pass

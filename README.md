@@ -648,6 +648,14 @@ None
 *   `query`: search terms
 *   `country`: country iso code
 
+### Delete alert
+
+`DELETE /alert/<alert_id>/`
+
+#### Params
+
+None
+
 API client
 ==========
 
