@@ -238,6 +238,16 @@ class ArachnysClient(object):
             'country': country,
         })
 
+    def update_alert(self, alert_id, query=None, country=None):
+        if not query and not country:
+            raise ValueError('Specify at least one parameter to update')
+        params = {}
+        if query:
+            params['query'] = query
+        if country:
+            params['country'] = country
+        return self.make_request('alert', 'put', alert_id, params)
+
 
 class ConfigException(Exception):
     pass

@@ -639,6 +639,15 @@ None
 *   `query`: search terms
 *   `country`: country iso code
 
+### Update existing alert
+
+`PUT /alert/<alert_id>/`
+
+#### Params (specify at least one)
+
+*   `query`: search terms
+*   `country`: country iso code
+
 API client
 ==========
 
