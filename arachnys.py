@@ -232,7 +232,7 @@ class ArachnysClient(object):
             params = None
         return self.make_request('alert', 'get', alert_id, params)
 
-    def register_alert(self, query, country):
+    def register_alert(self, query, country=None):
         return self.make_request('alert', 'post', params={
             'query': query,
             'country': country,
