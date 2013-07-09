@@ -630,6 +630,22 @@ None
 *   `updates_since`: iso-formatted date. Limit the updates returned to those
     following the given date. Defaults to 1 day ago
 
+#### Response
+
+*   `updates <list of objects>` - list of alert updates
+    *   `id` - id of update
+    *   `start_date` - lower bound of search results published date interval.
+    *   `end_date` - upper bound of search results published date interval, 
+                     usually it's the date in which the update is run.
+    *   `query` - search term results have been searched against
+    *   `total_results` - total number of results
+    *   `results` <list of objects> - list of search results
+      *   `title` - title of the search result
+      *   `norman_url` - url to a normalized copy of the result page
+      *   `published_date` - publication date of the search result
+      *   `original_url` - original url of the document
+
+
 ### Register new alert
 
 `POST /alert/`
