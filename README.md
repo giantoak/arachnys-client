@@ -73,17 +73,18 @@ All list requests accept the following querystring parameters:
 All sources are assigned to a `category`, which can take one of the following
 string values:
 
-*   `"corporate"` - corporate records, stock exchanges and business directories
-*   `"news"` - newspapers, magazines and TV channels relating to a specific country
+*   `"Corporate"` - corporate records, stock exchanges and business directories
+*   `"News"` - newspapers, magazines and TV channels relating to a specific country
 or a small group of countries in a geographical region
-*   `"litigation"` - court proceedings
-*   `"government"` - governmental bodies and information published by them
-*   `"social_media"` - blogs, microblogging and social networking sites
-*   `"regional"` - newspapers, magazines or online news sources that cover several
+*   `"Litigation"` - court proceedings
+*   `"Government"` - governmental bodies and information published by them
+*   `"Social media"` - blogs, microblogging and social networking sites
+*   `"Regional news"` - newspapers, magazines or online news sources that cover several
 countries in a region or worldwide
-*   `"sanctions_list"` - official lists of sanctioned individuals or companies and/or
+*   `"Sanctions list"` - official lists of sanctioned individuals or companies and/or
 individuals wanted by authorities in connection with crimes
-*   `"search_engine"` - fairly self-explanatory
+*   `"Directories"` - other sources of corporate or personal information
+*   `"Leaks"` - high-impact leak sites such as WikiLeaks and OffshoreLeaks
 
 ##### index_type
 
