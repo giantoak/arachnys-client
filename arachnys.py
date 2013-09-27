@@ -153,6 +153,30 @@ class ArachnysClient(object):
     def get_search(self, uid):
         return self.make_request('search', 'get', uid)
 
+    # News Search
+
+    def do_news_search(self, query,
+                       countries=None, exclude_countries=None,
+                       sources=None, exclude_sources=None,
+                       categories=None, exclude_categories=None,
+                       from_date=None, to_date=None):
+        payload = {
+            'query': query,
+            'countries': countries,
+            'exclude_countries': exclude_countries,
+            'sources': sources,
+            'exclude_sources': exclude_sources,
+            'categories': categories,
+            'exclude_categories': exclude_categories,
+            'from_date': from_date,
+            'to_date': to_date,
+        }
+        return self.make_request('news', 'post', params=payload)
+
+    def get_news_search(self, uid, start=None):
+        params = {'start': start} if start else {}
+        return self.make_request('news/' + str(uid), 'get', params=params)
+
     # SearchWorker / results
 
     def get_searchworker(self, id, start=0, page_size=10):

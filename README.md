@@ -114,7 +114,7 @@ provide some information on what the error was. This will be passed in the
 List responses include a convenience `meta` attribute which helps you handle
 pagination:
 
-    $ curl -XGET --user "<app_id>:<api_key" https://api.arachnys.com/api/v1/countries/
+    $ curl -XGET --user "<app_id>:<api_key>" https://api.arachnys.com/api/v1/countries/
 
     {
       ...
@@ -564,6 +564,109 @@ None
       "status": "ok"
     }
 
+### News search (beta)
+
+#### Overview
+
+Queries over our date ordered news index are fast and synchronous.
+
+What that means to you is that:
+
+*   Creating a search will return the results immediately.
+*   Further pages of results can be retrieved by `GET`ting from `/news/<news_uid>/?start=N`
+
+### Start a news search
+
+`POST /news/`
+
+#### Parameters
+
+Required:
+
+*   `query <string>` - query in Arachnys syntax (see Syntax Guide)
+
+Plus ZERO OR MORE of the following filters:
+
+*   `sources` or `exclude_sources <list of integers>`
+*   `countries` or `exclude_countries <list of iso code strings>`
+*   `categories` or `exclude_categories <list of strings>`
+*   `from_date <string in form YYYY-MM-DD>`
+*   `to_date <string in form YYYY-MM-DD>`
+
+#### Response
+
+*   `uid <string>` - `search`es do not have `id`s but `uid`s. You should use the
+    `uid` to reference the search.
+*   `query <string>` - query searched
+*   `results <list of objects>`
+    +  `title <string>`
+    +  `original_url <string>`
+    +  `cached_page <string>`
+    +  `translated_page <string>`
+    +  `snippet <string>`
+    +  `published_date <string>`
+    +  `sources <list of integers>`
+*   `meta <object>`
+    +   `next_page_link <string>`
+    +   `page_size <integer>`
+    +   `start <integer>` - 0 based offset of results retrieved
+    +   `total <integer>` - total number of results found
+
+
+#### Example
+
+    # Search for Abramovich in Albania
+    $ curl -XPOST --user "<app_id>:<api_key>" https://api.arachnys.com/api/v1/news/ -d '
+    {
+      "query": "abramovich",
+      "countries": ["al"]
+    }'
+
+    {
+      'uid': '5CUWrznMBDHfC55iu2L',
+      'query': 'abramovich',
+      'results': [
+        {
+          'cached_page': 'https://norman.arachnys.com/?url=https%3A% ... mbrojtesi%2F',
+          'original_url': 'http://botasot.info/sporti/234711/barcelona-ne-kerkim-te-nje-mbrojtesi/',
+          'published_date': '2013-08-01T00:00:00+00:00',
+          'snippet': '<span>. Nj\u00eb tjetu ... 20 milion\u00eb Euro. \n\n</span>',
+          'sources': [4401],
+          'title': 'Barcelona n\u00eb k\u00ebrkim t\u00eb nj\u00eb mbrojt\u00ebsi - Sporti - Bota Sot',
+          'translated_page': 'https://norman.arachnys.com/?url=https%3A%2F%2 ... %2Fbarcelona-ne-kerkim-te-nje-mbrojtesi%2F&translate=en'
+        },
+        ...
+      ],
+      'status': 'ok',
+      'meta': {
+        'next_page_link': '/api/v1/news/5CUWrznMBDHfC55iu2L/?start=10',
+        'page_size': 10,
+        'start': 0,
+        'total': 226
+      }
+    }
+
+### Paginate news search results
+
+`GET /news/<search_uid>/?start=10`
+
+#### Parameters
+
+Required:
+
+*   `search_uid` - uid of the search
+
+Optional:
+
+*   `start <integer - 0 based result offset, default is 0>`
+
+`page_size` is set at 10.
+
+#### Response
+
+Same as from creating a news search
+
+
 ### Translation
 
 `GET` or `POST /translate/`
@@ -636,15 +739,15 @@ None
 *   `updates <list of objects>` - list of alert updates
     *   `id` - id of update
     *   `start_date` - lower bound of search results published date interval.
-    *   `end_date` - upper bound of search results published date interval, 
+    *   `end_date` - upper bound of search results published date interval,
                      usually it's the date in which the update is run.
     *   `query` - search term results have been searched against
     *   `total_results` - total number of results
     *   `results` <list of objects> - list of search results
-      *   `title` - title of the search result
-      *   `norman_url` - url to a normalized copy of the result page
-      *   `published_date` - publication date of the search result
-      *   `original_url` - original url of the document
+        *   `title` - title of the search result
+        *   `norman_url` - url to a normalized copy of the result page
+        *   `published_date` - publication date of the search result
+        *   `original_url` - original url of the document
 
 
 ### Register new alert
