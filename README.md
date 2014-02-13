@@ -73,7 +73,8 @@ All list requests accept the following querystring parameters:
 All sources are assigned to a `category`, which can take one of the following
 string values:
 
-*   `"Corporate"` - corporate records, stock exchanges and business directories
+*   `"Corporate registry"` - corporate records
+*   `"Corporate data"` - government gazettes, stock exchanges and business directories
 *   `"News"` - newspapers, magazines and TV channels relating to a specific country
 or a small group of countries in a geographical region
 *   `"Litigation"` - court proceedings
