@@ -198,7 +198,7 @@ None
     *   `iso_code <string>`
     *   `name <string>`
     *   `num_sources <object>`
-        *   `corporate <int>` - number of corporate sources available for country
+        *   `corporate registry <int>` - number of corporate registry sources available for country
         *   `news <int>` - number of news sources available for country
         *   etc
 
@@ -490,7 +490,7 @@ OR
         "searchworkers":
         [
           {
-            "category": "Corporate",
+            "category": "Corporate registry",
             "name": "All Albania corporate",
             "results_retrieved": 0,
             "index_type": "basic_index",
