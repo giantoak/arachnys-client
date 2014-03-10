@@ -60,7 +60,7 @@ Currently we only support JSON as both a request and response format.
 
 #### List requests and responses
 
-All list requests accept the following querystring parameters:
+If not stated otherwise, all list requests accept the following querystring parameters:
 
 *   `page_size <int>` - max number of objects to show on page (default: `10`)
 *   `start <int>` - 0-based index of first result to show in results page
@@ -593,6 +593,10 @@ Plus ZERO OR MORE of the following filters:
 *   `categories` or `exclude_categories <list of strings>`
 *   `from_date <string in form YYYY-MM-DD>`
 *   `to_date <string in form YYYY-MM-DD>`
+
+Does not accept
+
+*   `page_size`
 
 #### Response
 
