@@ -594,6 +594,11 @@ Plus ZERO OR MORE of the following filters:
 *   `from_date <string in form YYYY-MM-DD>`
 *   `to_date <string in form YYYY-MM-DD>`
 
+The only categories returned by and accepted as arguments are:
+
+*   `"News"`
+*   `"Regional news"`
+
 Does not accept
 
 *   `page_size`
