@@ -188,6 +188,47 @@ class ArachnysClient(object):
             'page_size': page_size,
         })
 
+
+    def poll_searchworkers_fast(self, ids):
+        """
+        Just does a one-time pass through searchworkers, polling them for values.
+        Done as a workaround for issue of
+        :param list|tuple ids:
+        :return tuple: succeeded, failed, other, errors
+        """
+        if not isinstance(ids, list):
+            ids = [ids]
+        id_set = set(ids)
+
+        succeeded = []
+        succeeded_ids = set()
+        failed = []
+        failed_ids = set()
+        errors = []
+        error_ids = set()
+        other = []
+        other_ids = set()
+
+        for id in id_set:
+            worker = self.get_searchworker(id)
+            try:
+                status = worker['searchworker']['status']
+                if status == 'failed':
+                    failed.append(worker)
+                    failed_ids.add(id)
+                elif status == 'succeeded':
+                    succeeded.append(worker)
+                    succeeded_ids.add(id)
+                else:
+                    other.append(worker)
+                    other_ids.add(id)
+            except ResponseException:
+                errors.append(worker)
+                error_ids.add(id)
+
+        return succeeded, failed, other, errors
+
+
     def poll_searchworkers(self, ids, timeout=120):
         """
         Polls a searchworker or a list of searchworkers for a result. Will time out
