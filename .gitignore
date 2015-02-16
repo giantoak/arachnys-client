@@ -30,6 +30,7 @@ pip-log.txt
 .ropeproject
 *~
 *.orig
+.idea/*
 
 # OSX
 .DS_Store
