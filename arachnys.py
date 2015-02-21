@@ -188,12 +188,14 @@ class ArachnysClient(object):
             'page_size': page_size,
         })
 
-    def poll_searchworkers_fast(self, ids):
+    def poll_searchworkers_fast(self, ids, start=0, page_size=10):
         """
         Just does a one-time pass through searchworkers, polling them for values.
         Done as a workaround for when poll_searchworkers crashes because it hits
         a ResponseException
-        :param list|tuple ids:
+        :param ids:
+        :param int start:
+        :param int page_size:
         :return tuple: succeeded, failed, other, error_ids
         """
         if not isinstance(ids, list):
@@ -210,7 +212,7 @@ class ArachnysClient(object):
 
         for sw_id in id_set:
             try:
-                worker = self.get_searchworker(sw_id)
+                worker = self.get_searchworker(sw_id, start, page_size)
                 status = worker['searchworker']['status']
                 if status == 'failed':
                     failed.append(worker)
@@ -226,7 +228,9 @@ class ArachnysClient(object):
 
         return succeeded, failed, other, error_ids
 
-    def poll_searchworkers(self, ids, timeout=120):
+    def poll_searchworkers(self, ids,
+                           timeout=120, sleep_time=2,
+                           start=0, page_size=10):
         """
         Polls a searchworker or a list of searchworkers for a result. Will time out
         after `timeout` seconds.
@@ -235,7 +239,10 @@ class ArachnysClient(object):
         b) timeout is reached
         Implementing a non-blocking version is left as an exercise to the reader.
         :param ids:
-        :param timeout:
+        :param int|float timeout:
+        :param int|float sleep_time:
+        :param int start:
+        :param int page_size:
         :return:
         """
         started = time.time()
@@ -250,7 +257,7 @@ class ArachnysClient(object):
         while True:
             for sw_id in id_set:
                 try:
-                    worker = self.get_searchworker(sw_id)
+                    worker = self.get_searchworker(sw_id, start, page_size)
                     status = worker['searchworker']['status']
                     if status == 'failed':
                         failed.append(worker)
@@ -270,7 +277,7 @@ class ArachnysClient(object):
                     failed.append(self.get_searchworker(sw_id))
                     failed_ids.add(sw_id)
                 break
-            time.sleep(2)
+            time.sleep(sleep_time)
         return succeeded, failed
 
     # Sources
