@@ -248,15 +248,19 @@ class ArachnysClient(object):
         # Don't even bother doing concurrent stuff
         while True:
             for id in id_set:
-                worker = self.get_searchworker(id)
-                status = worker['searchworker']['status']
-                if status == 'failed':
-                    failed.append(worker)
-                    failed_ids.add(id)
-                elif status == 'succeeded':
-                    succeeded.append(worker)
-                    succeeded_ids.add(id)
-            id_set = id_set - (failed_ids | succeeded_ids)
+                try:
+                    worker = self.get_searchworker(id)
+                    status = worker['searchworker']['status']
+                    if status == 'failed':
+                        failed.append(worker)
+                        failed_ids.add(id)
+                    elif status == 'succeeded':
+                        succeeded.append(worker)
+                        succeeded_ids.add(id)
+                except ResponseException:
+                    # Retrieving the worker failed
+                    pass
+                id_set = id_set - (failed_ids | succeeded_ids)
             if not id_set:  # We're finished, none left
                 break
             if time.time() - started > timeout:
