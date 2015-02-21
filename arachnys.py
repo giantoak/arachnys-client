@@ -103,8 +103,8 @@ class ArachnysClient(object):
             params['filter'] = filter
         return self.make_request('collections', 'get', params=params)
 
-    def get_collection(self, id):
-        return self.make_request('collection', 'get', id)
+    def get_collection(self, collection_id):
+        return self.make_request('collection', 'get', collection_id)
 
     def create_collection(self, name=None, description=None, sources=()):
         return self.make_request('collection', 'post', params={
@@ -113,7 +113,7 @@ class ArachnysClient(object):
             'sources': sources,
         })
 
-    def modify_collection(self, id, name=None, description=None, sources=()):
+    def modify_collection(self, collection_id, name=None, description=None, sources=()):
         params = {}
         if name is not None:
             params['name'] = name
@@ -123,10 +123,10 @@ class ArachnysClient(object):
             params['sources'] = sources
         if not params:
             raise Exception('No data supplied to modify resource')
-        return self.make_request('collection', 'put', id, params=params)
+        return self.make_request('collection', 'put', collection_id, params=params)
 
-    def delete_collection(self, id):
-        return self.make_request('collection', 'delete', id)
+    def delete_collection(self, collection_id):
+        return self.make_request('collection', 'delete', collection_id)
 
     # Countries
 
@@ -182,8 +182,8 @@ class ArachnysClient(object):
 
     # SearchWorker / results
 
-    def get_searchworker(self, id, start=0, page_size=10):
-        return self.make_request('searchworker', 'get', id, {
+    def get_searchworker(self, sw_id, start=0, page_size=10):
+        return self.make_request('searchworker', 'get', sw_id, {
             'start': start,
             'page_size': page_size,
         })
@@ -208,21 +208,21 @@ class ArachnysClient(object):
         other = []
         other_ids = set()
 
-        for cur_id in id_set:
+        for sw_id in id_set:
             try:
-                worker = self.get_searchworker(cur_id)
+                worker = self.get_searchworker(sw_id)
                 status = worker['searchworker']['status']
                 if status == 'failed':
                     failed.append(worker)
-                    failed_ids.add(cur_id)
+                    failed_ids.add(sw_id)
                 elif status == 'succeeded':
                     succeeded.append(worker)
-                    succeeded_ids.add(cur_id)
+                    succeeded_ids.add(sw_id)
                 else:
                     other.append(worker)
-                    other_ids.add(cur_id)
+                    other_ids.add(sw_id)
             except ResponseException:
-                error_ids.add(cur_id)
+                error_ids.add(sw_id)
 
         return succeeded, failed, other, error_ids
 
@@ -230,12 +230,13 @@ class ArachnysClient(object):
         """
         Polls a searchworker or a list of searchworkers for a result. Will time out
         after `timeout` seconds.
-
         This method will block until either
         a) all workers have completed, or
         b) timeout is reached
-
         Implementing a non-blocking version is left as an exercise to the reader.
+        :param ids:
+        :param timeout:
+        :return:
         """
         started = time.time()
         if not isinstance(ids, list):
@@ -247,16 +248,16 @@ class ArachnysClient(object):
         id_set = set(ids)
         # Don't even bother doing concurrent stuff
         while True:
-            for id in id_set:
+            for sw_id in id_set:
                 try:
-                    worker = self.get_searchworker(id)
+                    worker = self.get_searchworker(sw_id)
                     status = worker['searchworker']['status']
                     if status == 'failed':
                         failed.append(worker)
-                        failed_ids.add(id)
+                        failed_ids.add(sw_id)
                     elif status == 'succeeded':
                         succeeded.append(worker)
-                        succeeded_ids.add(id)
+                        succeeded_ids.add(sw_id)
                 except ResponseException:
                     # Retrieving the worker failed
                     pass
@@ -265,12 +266,12 @@ class ArachnysClient(object):
                 break
             if time.time() - started > timeout:
                 # Mark unfinished as failed
-                for id in id_set:
-                    failed.append(self.get_searchworker(id))
-                    failed_ids.add(id)
+                for sw_id in id_set:
+                    failed.append(self.get_searchworker(sw_id))
+                    failed_ids.add(sw_id)
                 break
             time.sleep(2)
-        return (succeeded, failed)
+        return succeeded, failed
 
     # Sources
 
