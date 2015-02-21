@@ -191,7 +191,45 @@ class ArachnysClient(object):
         return self.make_request('searchworker', 'get', sw_id, {
             'start': start,
             'page_size': page_size,
-        })
+            })
+
+    def get_worker_results(self, sw_id, max_results=-1, start=0, timeout=120, sleep_time=2):
+        """
+        Get 'searchresults' fields for a particular searchworker up to a given count.
+        :param sw_id: searchworker for which to fetch results
+        :param int max_results: maximum number of results to return. If less than 1, return all results
+        :param int start: first result to return
+        :param int timeout:
+        :param int sleep_time:
+        :return list: the max_results entries for the 'searchresults' field, unpaginated
+        """
+        started = time.time()
+        sw = None
+        while sw is None and time.time() - started < timeout:
+            try:
+                sw = self.get_searchworker(sw_id, start)
+            except ResponseException:
+                time.sleep(sleep_time)
+
+        if sw is None:
+            return []
+
+        results = sw['searchresults']
+        if max_results < 1:
+            max_results = sw['meta']['total']
+        else:
+            max_results += start
+
+        cur_start = start + sw['meta']['page_size']
+        while cur_start < max_results and time.time() - started < timeout:
+            try:
+                sw = self.get_searchworker(sw_id, cur_start)
+                results += sw['searchresults']
+                cur_start += sw['meta']['page_size']
+            except ResponseException:
+                time.sleep(sleep_time)
+
+        return results[:max_results]
 
     def poll_searchworkers_fast(self, ids, start=0, page_size=10):
         """
