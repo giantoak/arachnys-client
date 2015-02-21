@@ -39,6 +39,11 @@ class ArachnysClient(object):
         Takes an endpoint and makes the request, returning a Response object Params
         will be urlencoded if making a GET request, and otherwise will be sent as a
         JSON object.
+        :param endpoint:
+        :param method:
+        :param resource_id:
+        :param params:
+        :return dict:
         """
         url = urljoin(self.API_BASE, endpoint)
         if not url.endswith('/'):
